@@ -10,7 +10,7 @@
 
 # production
 /build
-.cache
+.parcel-cache
 
 # misc
 .DS_Store

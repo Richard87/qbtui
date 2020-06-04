@@ -20,9 +20,16 @@
     "ecmaVersion": 11,
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "plugins": [
+    "react"
+  ],
   "rules": {
     "react/prop-types": 0,
     "prettier/prettier": "error"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
