@@ -319,7 +319,6 @@ function formatDate(value, meta, updateValue) {
 
 function formatTimeDuration(value, meta, updateValue) {
     if (value === 8640000) {
-        console.log({ meta, updateValue })
         return "NA"
     }
 

@@ -2,11 +2,22 @@ import React from "react"
 import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
 import Typography from "@material-ui/core/Typography"
-import { makeStyles } from "@material-ui/core/styles"
+import { makeStyles, MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles"
 import LoginPage from "./LoginPage"
 import QBApi from "qbittorrent-api-v2"
 import TorrentPage from "./TorrentPage"
 import { useSnackbar } from "notistack"
+
+const getMuiTheme = () =>
+    createMuiTheme({
+        overrides: {
+            MUIDataTable: {
+                responsiveScrollFullHeight: {
+                    overflowX: "scroll",
+                },
+            },
+        },
+    })
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,18 +47,20 @@ function App() {
     }
 
     return (
-        <ApiContext.Provider value={api}>
-            <div className="App">
-                <AppBar position="static">
-                    <Toolbar>
-                        <Typography variant="h6" className={classes.title}>
-                            qBitTorrent
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
-                {api ? <TorrentPage /> : <LoginPage onLogin={onLogin} />}{" "}
-            </div>
-        </ApiContext.Provider>
+        <MuiThemeProvider theme={getMuiTheme()}>
+            <ApiContext.Provider value={api}>
+                <div className="App">
+                    <AppBar position="static">
+                        <Toolbar>
+                            <Typography variant="h6" className={classes.title}>
+                                qBitTorrent
+                            </Typography>
+                        </Toolbar>
+                    </AppBar>
+                    {api ? <TorrentPage /> : <LoginPage onLogin={onLogin} />}{" "}
+                </div>
+            </ApiContext.Provider>
+        </MuiThemeProvider>
     )
 }
 

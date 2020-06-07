@@ -6,7 +6,7 @@
 
 ## TODO:
 
--   [ ] Filter torrent list
+-   [X] Filter torrent list
 -   [ ] Upload torrent and configure save path
 -   [ ] Start/Stop/Delete torrent
 -   [ ] Include all configurations from old qBitTorrent Webui

@@ -7,27 +7,16 @@ import Container from "@material-ui/core/Container"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import MUIDataTable from "mui-datatables"
 
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        marginTop: theme.spacing(4),
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-    },
+const useStyles = makeStyles((theme) => {
+    console.log(theme)
 
-    form: {
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-    table: {
-        marginTop: theme.spacing(4),
-        marginBottom: theme.spacing(4),
-        width: "100%",
-        minWidth: 650,
-    },
-}))
+    return {
+        table: {
+            marginTop: theme.spacing(4),
+            marginBottom: theme.spacing(4),
+        },
+    }
+})
 
 const TorrentPage = () => {
     const api = useContext(ApiContext)
@@ -54,7 +43,7 @@ const TorrentPage = () => {
             <CssBaseline />
             <MUIDataTable
                 data={torrents}
-                options={{ searchOpen: true, download: false, print: false, responsive: true }}
+                options={{ searchOpen: true, download: false, print: false, responsive: "scrollFullHeight" }}
                 columns={categories}
                 className={classes.table}
                 size="small"
