@@ -1,6 +1,6 @@
 import React, { useContext } from "react"
 import { formatRelative, format, formatDistance } from "date-fns"
-import { IconButton } from "@material-ui/core"
+import { IconButton, TableCell, Tooltip, makeStyles } from "@material-ui/core"
 import { ApiContext } from "./App"
 import DeleteIcon from "@material-ui/icons/Delete"
 import PlayArrowIcon from "@material-ui/icons/PlayArrow"
@@ -13,7 +13,14 @@ const useCategories = (torrents, api) => {
         {
             name: "name",
             label: "Name",
-            options: { filter: false, sort: true, display: "true", viewColumns: true, searchable: true },
+            options: {
+                filter: false,
+                sort: true,
+                display: "true",
+                viewColumns: true,
+                searchable: true,
+                customBodyRender: (value) => <NameCell value={value} />,
+            },
         },
         {
             name: "added_on",
@@ -194,6 +201,7 @@ const useCategories = (torrents, api) => {
                 display: "true",
                 viewColumns: true,
                 searchable: false,
+                sortDirection: "asc",
                 customBodyRender: (value) => (value * 100).toFixed() + "%",
             },
         },
@@ -319,7 +327,7 @@ const useCategories = (torrents, api) => {
         },
 
         {
-            name: "Control",
+            name: "",
             label: "",
             options: {
                 filter: false,
@@ -349,10 +357,30 @@ const useCategories = (torrents, api) => {
     ]
 }
 
+const useCellStyle = makeStyles((theme) => ({
+    descriptionCell: {
+        whiteSpace: "nowrap",
+        width: "15em",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+    },
+}))
+
 export default useCategories
 
 function formatDate(value, meta, updateValue) {
     return new Date(value * 1000).toLocaleDateString()
+}
+function NameCell({ value }) {
+    const classes = useCellStyle()
+
+    if (!value) return null
+
+    return (
+        <Tooltip title={value}>
+            <div className={classes.descriptionCell}>{value}</div>
+        </Tooltip>
+    )
 }
 
 function formatTimeDuration(value, meta, updateValue) {

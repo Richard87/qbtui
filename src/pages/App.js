@@ -16,6 +16,11 @@ const getMuiTheme = () =>
                     overflowX: "scroll",
                 },
             },
+            MUIDataTableBodyCell: {
+                root: {
+                    whiteSpace: "nowrap",
+                },
+            },
         },
     })
 
