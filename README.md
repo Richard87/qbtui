@@ -8,7 +8,7 @@
 
 -   [X] Filter torrent list
 -   [ ] Upload torrent and configure save path
--   [ ] Start/Stop/Delete torrent
+-   [x] Start/Stop/Delete torrent
 -   [ ] Include all configurations from old qBitTorrent Webui
 -   [ ] Translations (make script to convert upstream and use the same)
 
