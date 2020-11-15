@@ -13,7 +13,7 @@ const getMuiTheme = () =>
         overrides: {
             MUIDataTable: {
                 responsiveScrollFullHeight: {
-                    overflowX: "scroll",
+                    overflowX: "auto",
                 },
             },
             MUIDataTableBodyCell: {

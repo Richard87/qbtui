@@ -5,10 +5,11 @@ import { ApiContext } from "./App"
 import DeleteIcon from "@material-ui/icons/Delete"
 import PlayArrowIcon from "@material-ui/icons/PlayArrow"
 import PauseIcon from "@material-ui/icons/Pause"
+import InfoIcon from "@material-ui/icons/Info"
 
 const now = new Date()
 
-const useCategories = (torrents, api) => {
+const useCategories = (torrents, api, selections, onInfo) => {
     return [
         {
             name: "name",
@@ -201,7 +202,6 @@ const useCategories = (torrents, api) => {
                 display: "true",
                 viewColumns: true,
                 searchable: false,
-                sortDirection: "asc",
                 customBodyRender: (value) => (value * 100).toFixed() + "%",
             },
         },
@@ -348,6 +348,9 @@ const useCategories = (torrents, api) => {
                             </IconButton>
                             <IconButton onClick={() => api.pauseTorrents(hash)}>
                                 <PauseIcon />
+                            </IconButton>
+                            <IconButton onClick={() => onInfo(hash)}>
+                                <InfoIcon />
                             </IconButton>
                         </>
                     )

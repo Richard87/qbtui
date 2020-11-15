@@ -49,7 +49,6 @@ const LoginPage = ({ onLogin }) => {
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         margin="normal"
-                        id="standard-basic"
                         required
                         fullWidth
                         name="username"
@@ -61,7 +60,6 @@ const LoginPage = ({ onLogin }) => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         margin="normal"
-                        id="standard-basic"
                         type="password"
                         required
                         fullWidth

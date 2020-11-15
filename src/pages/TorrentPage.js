@@ -9,6 +9,11 @@ import MUIDataTable from "mui-datatables"
 import TablePagination from "@material-ui/core/TablePagination"
 import useCategories from "./useCategories"
 
+import Box from "@material-ui/core/Box"
+
+import AppBar from "@material-ui/core/AppBar"
+import Tabs from "@material-ui/core/Tabs"
+import Tab from "@material-ui/core/Tab"
 import Tooltip from "@material-ui/core/Tooltip"
 import CompareArrowsIcon from "@material-ui/icons/CompareArrows"
 import IndeterminateCheckBoxIcon from "@material-ui/icons/IndeterminateCheckBox"
@@ -22,8 +27,6 @@ import { DropzoneDialog } from "material-ui-dropzone"
 import Button from "@material-ui/core/Button"
 
 const useStyles = makeStyles((theme) => {
-    console.log(theme)
-
     return {
         table: {
             marginTop: theme.spacing(4),
@@ -55,11 +58,16 @@ const TorrentPage = () => {
     const [torrents, setTorrents] = useState([])
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
-    const [selections, setSelections] = useState([])
-    const categories = useCategories(torrents, api, selections)
     const [showUploadDialog, setShowUploadDialog] = useState(false)
     const [showTorrentDetails, setShowTorrentDetails] = useState(null)
 
+    const onInfo = (hash) => {
+        torrent = torrents.find((t) => t.hash === hash)
+        console.log(torrent)
+        setShowTorrentDetails(torrent)
+    }
+
+    const categories = useCategories(torrents, api, selections, onInfo)
     useEffect(() => {
         fetchTorrents(api, enqueueSnackbar).then(setTorrents)
 
@@ -71,10 +79,6 @@ const TorrentPage = () => {
             clearInterval(interval)
         }
     }, [api, enqueueSnackbar])
-
-    const onSelected = (selectedIndex, allSelectionIndexes) => {
-        setSelections(allSelectionIndexes.map((row) => torrents[row.dataIndex].hash))
-    }
 
     const onSaveTorrent = (torrents, e) => {
         setShowUploadDialog(false)
@@ -96,17 +100,6 @@ const TorrentPage = () => {
             .catch((xhr) => enqueueSnackbar("Upload failed", { variant: "error" }))
     }
 
-    const rowSelections = selections.reduce((carry, hash) => {
-        const index = torrents.findIndex((t) => t.hash === hash)
-        if (index !== -1) carry.push(index)
-
-        return carry
-    }, [])
-
-    const onRowClick = (rowData, { dataIndex, rowIndex }) => {
-        setShowTorrentDetails(torrents[dataIndex])
-    }
-
     return (
         <Container component="main">
             <CssBaseline />
@@ -114,30 +107,15 @@ const TorrentPage = () => {
                 size="small"
                 data={torrents}
                 options={{
-                    rowsSelected: rowSelections,
-                    selectableRowsOnClick: false,
-                    onRowsSelect: onSelected,
-
                     searchOpen: true,
                     download: false,
                     print: false,
-                    responsive: "scrollFullHeight",
-
-                    onRowClick: onRowClick,
+                    responsive: "standard",
+                    selectableRows: "none",
 
                     setTableProps: () => ({ size: "small" }),
                     customFooter: Footer,
                     customToolbar: () => <CustomToolbar showUploadDialog={() => setShowUploadDialog(true)} />,
-                    customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
-                        <CustomToolbarSelect
-                            selectedRows={selectedRows}
-                            displayData={displayData}
-                            api={api}
-                            selectedTorrents={selections}
-                            torrents={torrents}
-                            clearSelection={() => setSelections([])}
-                        />
-                    ),
                 }}
                 columns={categories}
                 className={classes.table}
@@ -146,7 +124,6 @@ const TorrentPage = () => {
             <DropzoneDialog
                 open={showUploadDialog}
                 onSave={onSaveTorrent}
-                acceptedFiles={["application/x-bittorrent"]}
                 showPreviews={false}
                 maxFileSize={5000000}
                 onClose={() => setShowUploadDialog(false)}
@@ -160,48 +137,32 @@ const TorrentPage = () => {
 }
 export default TorrentPage
 
-const useToolbarSelectStyles = makeStyles((theme) => ({
-    iconButton: {},
-    iconContainer: {
-        marginRight: "24px",
-    },
-    inverseIcon: {
-        transform: "rotate(90deg)",
-    },
-}))
+function a11yProps(index) {
+    return {
+        id: `simple-tab-${index}`,
+        "aria-controls": `simple-tabpanel-${index}`,
+    }
+}
 
-const CustomToolbarSelect = ({ selectedRows, displayData, selectedTorrents, torrents, api, clearSelection }) => {
-    const classes = useToolbarSelectStyles()
+function TabPanel(props) {
+    const { children, value, index, ...other } = props
 
     return (
-        <div className={classes.iconContainer}>
-            <Tooltip title={"Deselect ALL"}>
-                <IconButton className={classes.iconButton} onClick={clearSelection}>
-                    <IndeterminateCheckBoxIcon className={classes.icon} />
-                </IconButton>
-            </Tooltip>
-
-            <Tooltip title={"Resume selected"}>
-                <IconButton onClick={() => api.resumeTorrents(selectedTorrents.join("|"))}>
-                    <PlayArrowIcon />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title={"Delete selected"}>
-                <IconButton onClick={() => api.deleteTorrents(selectedTorrents.join("|"))}>
-                    <DeleteIcon />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title={"Pause selected"}>
-                <IconButton onClick={() => api.pauseTorrents(selectedTorrents.join("|"))}>
-                    <PauseIcon />
-                </IconButton>
-            </Tooltip>
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && <Box p={3}>{children}</Box>}
         </div>
     )
 }
 
 const TorrentDetails = ({ torrent, api }) => {
     const [properties, setProperties] = useState({})
+    const [page, setPage] = useState(0)
 
     useEffect(() => {
         if (!torrent) return
@@ -213,8 +174,23 @@ const TorrentDetails = ({ torrent, api }) => {
 
     return (
         <>
-            <h1>{torrent?.name.split(".").join(" ") ?? ""}</h1>
-            <pre>{JSON.stringify({ torrent, properties }, null, 2)}</pre>
+            <AppBar position="static">
+                <Tabs value={page} onChange={(e, value) => setPage(value)} aria-label="simple tabs example">
+                    <Tab label="Item One" {...a11yProps(0)} />
+                    <Tab label="Item Two" {...a11yProps(1)} />
+                    <Tab label="Item Three" {...a11yProps(2)} />
+                </Tabs>
+            </AppBar>
+            <TabPanel value={page} index={0}>
+                Item One
+            </TabPanel>
+            <TabPanel value={page} index={1}>
+                <h1>{torrent?.name.split(".").join(" ") ?? ""}</h1>
+                <pre>{JSON.stringify({ torrent, properties }, null, 2)}</pre>
+            </TabPanel>
+            <TabPanel value={page} index={2}>
+                Item Three
+            </TabPanel>
         </>
     )
 }

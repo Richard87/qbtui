@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9579145b-7d08-494f-a2bb-6654d21fc79c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/TorrentPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/TorrentPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/categories.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/categories.js" afterDir="false" />
-    </list>
+    <list default="true" id="9579145b-7d08-494f-a2bb-6654d21fc79c" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -41,6 +35,7 @@
       <option name="presentableId" value="Default" />
       <updated>1591525858034</updated>
       <workItem from="1591525859576" duration="546000" />
+      <workItem from="1591603005332" duration="147000" />
     </task>
     <servers />
   </component>
