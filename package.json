@@ -13,7 +13,7 @@
     "material-ui-dropzone": "^3.5.0",
     "mui-datatables": "^3.7.1",
     "notistack": "^1.0.1",
-    "parcel": "^2.0.0-beta.1",
+    "parcel": "^2.8.2",
     "parcel-plugin-eslint": "^1.0.8-2",
     "prettier": "^2.1.2",
     "qbittorrent-api-v2": "^1.2.0",
